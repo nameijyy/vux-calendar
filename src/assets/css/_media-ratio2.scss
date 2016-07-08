@@ -1,0 +1,19 @@
+
+@media screen and (-webkit-min-device-pixel-ratio: 2){
+  .ui-border-radius{border: none}
+  .ui-border-radius:before {
+    content: "";
+    width: 200%;
+    height: 200%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid #ddd;
+    -webkit-transform: scale(0.5);
+    -webkit-transform-origin: 0 0;
+    padding: 1px;
+    -webkit-box-sizing: border-box;
+    border-radius: 4px;
+    pointer-events: none;
+  }
+}
