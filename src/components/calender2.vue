@@ -26,6 +26,7 @@
             :show-last-month="false"
             :show-next-month="false"
             :selected-list="list"
+            :default-pay = "default_pay"
             :render-on-value-change="false"></inline-calendar>
         <!--</div>-->
       </div>
@@ -33,7 +34,7 @@
 </template>
 
 <script>
-  import inlineCalendar from './inline-calendar/index.vue'
+  import inlineCalendar from './inline-calendar/index2.vue'
 
 
   export default {
@@ -45,6 +46,7 @@
         calendar_show:true,
         listValue: '',
         list:{},
+        default_pay:"￥352"
       }
     },
     methods:{
@@ -63,11 +65,11 @@
         var that = this;
         setTimeout(function(){
           that.list = {
-            "2016-07-08":{"mate":"已租","class":"is_selected_day2"},
-            "2016-07-09":{"mate":"已租","class":"is_selected_day2"},
-            "2016-07-10":{"mate":"已租","class":"is_selected_day2"},
-            "2016-07-11":{"mate":"已租","class":"is_selected_day2"},
-            "2016-07-12":{"mate":"已租","class":"is_selected_day2"},
+//            "2016-07-08":{"mate":"已租","class":"is_selected_day2"},
+//            "2016-07-09":{"mate":"已租","class":"is_selected_day2"},
+            "2016-07-10":{"mate":"已租","class":"is_selected_day2","type":1},
+            "2016-07-11":{"mate":"已租","class":"is_selected_day2","type":1},
+            "2016-07-12":{"mate":"已租","class":"is_selected_day2","type":1},
 //            "2016-07-13":{"mate":"￥258","class":"new_selected_day_center"},
 //            "2016-07-14":{"mate":"￥258","class":"new_selected_day_center"},
 //            "2016-07-15":{"mate":"￥258","class":"new_selected_day_center"},
@@ -87,9 +89,9 @@
             "2016-07-29":{"mate":"￥258","class":"no_selected_day2"},
             "2016-07-30":{"mate":"￥258","class":"no_selected_day2"},
             "2016-07-31":{"mate":"￥258","class":"no_selected_day2"},
-            "2016-08-10":{"mate":"已租","class":"is_selected_day2"},
-            "2016-09-10":{"mate":"已租","class":"is_selected_day2"},
-            "2016-09-12":{"mate":"已租","class":"is_selected_day2"},
+            "2016-08-10":{"mate":"已租","class":"is_selected_day2","type":1},
+            "2016-09-10":{"mate":"已租","class":"is_selected_day2","type":1},
+            "2016-09-12":{"mate":"已租","class":"is_selected_day2","type":1},
           }
         },500);
 

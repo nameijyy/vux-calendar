@@ -8,11 +8,12 @@
       :return-six-rows="false"
       :value.sync="listValue"
       :disable-past="true"
-      :show-month="[7,12]"
+      :show-month-list=show_month_list
       :replace-text-list="{'TODAY':'今天'}"
       :show-last-month="false"
       :show-next-month="false"
       :selected-list="list"
+      :default-pay = "default_pay"
       :render-on-value-change="true"></inline-calendar>
   </div>
 </template>
@@ -34,6 +35,19 @@
         listValue: '',
         list:{},
         selDay:8,
+        show_month_list:[],
+        default_pay:"￥352"
+      }
+    },
+    ready(){
+      //处理可操作的月份
+      var monthstr = 0;
+      var monthshow = monthstr;
+      for(var i=0;i<6;i++){
+        monthstr = 7 + i;
+        monthstr = monthstr>12 ? 1 : monthstr;
+        monthshow = monthstr < 10 ? "0"+monthstr : monthstr;
+        this.show_month_list.push(2016+"-"+monthshow);
       }
     },
     methods:{

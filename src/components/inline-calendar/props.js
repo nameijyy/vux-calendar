@@ -70,7 +70,16 @@ export default () => ({
       return {}
     }
   },
+  defaultPay:{
+    type:String
+  },
   showMonth: {
+    type: Array,
+    coerce (val) {
+      return val && val.length ? val : []
+    }
+  },
+  showMonthList: {
     type: Array,
     coerce (val) {
       return val && val.length ? val : []

@@ -17,9 +17,9 @@
         </template>
         <template v-else>
           <div class="calendar-month flex-warp">
-            <div class="calendar-btn" @click="prev" v-show="!showMonth[0] || showMonth[0] && showMonth[0]< months[month]" ><a class="month-prev vux-prev-icon"  href="javascript:"></a></div>
+            <div class="calendar-btn" @click="prev" v-show="showPrev" ><a class="month-prev vux-prev-icon"  href="javascript:"></a></div>
             <div class="calendar-month-txt flex-item">{{year}} - {{months[month]}}</div>
-            <div class="calendar-btn" @click="next" v-show="!showMonth[1] || showMonth[1] && showMonth[1]> months[month]"><a  class="month-next vux-next-icon"  href="javascript:"></a></div>
+            <div class="calendar-btn" @click="next" v-show="showNext"><a  class="month-next vux-next-icon"  href="javascript:"></a></div>
           </div>
         </template>
 
@@ -111,12 +111,13 @@ export default {
       current: [],
       today: format(new Date(), 'YYYY-MM-DD'),
       months: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-      newSelectedDays:[]
+      newSelectedDays:[],
+      showNext:true,
+      showPrev:true
     }
   },
   ready () {
     this.value = this.convertDate(this.value)
-
     if(this.showAllMonth){
       this.allDays = {};
       var months_list = [6,7,8,9];
@@ -126,9 +127,30 @@ export default {
     }else{
       this.render(this.renderMonth[0], this.renderMonth[1] - 1)
     }
+
   },
   computed: {
     _replaceTextList () {
+
+      //是否显示上一个月，下一个月
+      if(this.showMonthList.length){
+        var newstr = this.showMonthList.toString();
+        var nextmonth = this.month>10 ? 1 : this.month+2;
+        var prevmonth = this.month;
+        nextmonth = nextmonth < 10 ? "0"+nextmonth : nextmonth;
+        prevmonth = prevmonth < 10 ? "0"+prevmonth : prevmonth;
+        if(newstr.indexOf(this.year+"-"+nextmonth)>-1){
+          this.showNext = true;
+        }else{
+          this.showNext = false;
+        }
+        if(newstr.indexOf(this.year+"-"+prevmonth)>-1){
+          this.showPrev = true;
+        }else{
+          this.showPrev = false;
+        }
+      }
+
       const rs = {}
       for (let i in this.replaceTextList) {
         rs[this.convertDate(i)] = this.replaceTextList[i]
@@ -179,6 +201,9 @@ export default {
       if(this.selectedList[date_index]){
         className[this.selectedList[date_index].class] = true;
         child.mate = this.selectedList[date_index].mate;
+      }else if(!child.disabled){
+        className["no_selected_day"] = true;
+        child.mate = this.defaultPay;
       }
       return className
     },
@@ -238,45 +263,12 @@ export default {
       if(this.selectClose){
         return false;
       }
-
-      this.value = [this.allDays[k3].year, zero(this.allDays[k3].month + 1), zero(this.allDays[k3].days[k1][k2].day)].join('-')
-
-      var sel_len = this.newSelectedDays.length;
-      if(sel_len == 1){//选择离开时间
-        this.newSelectedDays.push(this.value);
-      }else if(sel_len > 1){//取消选择
-        this.newSelectedDays = [];
-        this.newSelectedDays.push(this.value);
-      }else{//选择入住时间
-        this.newSelectedDays.push(this.value);
-      }
-      console.log(this.newSelectedDays);
-
-//      this.value = [this.year, zero(this.month + 1), zero(this.days[k1][k2].day)].join('-')
-//
-//      var sel_len = this.newSelectedDays.length;
-//      if(sel_len == 1){//选择离开时间
-//        this.newSelectedDays.push(this.value);
-//      }else if(sel_len > 1){//取消选择
-//        this.newSelectedDays = [];
-//      }else{//选择入住时间
-//        this.newSelectedDays.push(this.value);
-//      }
-//      console.log(this.newSelectedDays);
-
-//      this.replaceTextList.IN = "入住";
-//      this.in_day = "2016-07-10";
-//      this.replaceTextList.OUT = "离开";
-//      this.in_day = "2016-07-12";
-//      console.log('a');
-//      this.value = [this.year, zero(this.month + 1), zero(this.days[k1][k2].day)].join('-')
-
-//      if (this.current.length > 0) {
-//        this.days[this.current[0]][this.current[1]].isCurrent = false
-//      }console.log(this.days);
-//      this.days[k1][k2].current = true
-//      this.current = [k1, k2]
-//      this.value = [this.year, zero(this.month + 1), zero(this.days[k1][k2].day)].join('-')
+      if (this.current.length > 0) {
+        this.days[this.current[0]][this.current[1]].isCurrent = false
+      }console.log(this.days);
+      this.days[k1][k2].current = true
+      this.current = [k1, k2]
+      this.value = [this.year, zero(this.month + 1), zero(this.days[k1][k2].day)].join('-')
     }
   }
 }

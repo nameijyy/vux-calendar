@@ -60,6 +60,7 @@ export function getDays ({year, month, value, isRange = false, rangeBegin, range
   let startOfToday = new Date()
   startOfToday.setHours(0, 0, 0, 0)
   let mate_default = "";
+  let select_disabled = false;
 
   let _splitValue = splitValue(value || today)
 
@@ -103,7 +104,8 @@ export function getDays ({year, month, value, isRange = false, rangeBegin, range
           day: k,
           disabled: true,
           isLastMonth: true,
-          mate:mate_default
+          mate:mate_default,
+          select_disabled:select_disabled
 
         })
         k++
@@ -119,7 +121,8 @@ export function getDays ({year, month, value, isRange = false, rangeBegin, range
       isCurrent: value && format(new Date(value), 'YYYY/MM/DD') === _format,
       disabled: !isBetween(_format, rangeBegin, rangeEnd),
       isToday: format(new Date(), 'YYYY/MM/DD') === _format,
-      mate:mate_default
+      mate:mate_default,
+      select_disabled:select_disabled
     }
     temp[line].push(options)
 
@@ -136,7 +139,8 @@ export function getDays ({year, month, value, isRange = false, rangeBegin, range
           day: k,
           disabled: true,
           isNextMonth: true,
-          mate:mate_default
+          mate:mate_default,
+          select_disabled:select_disabled
         })
         k++
       }
@@ -155,7 +159,8 @@ export function getDays ({year, month, value, isRange = false, rangeBegin, range
         day: ++start,
         disabled: true,
         isNextMonth: true,
-        mate:mate_default
+        mate:mate_default,
+        select_disabled:select_disabled
       })
     }
   }
@@ -174,7 +179,8 @@ export function getDays ({year, month, value, isRange = false, rangeBegin, range
         day: ++start,
         disabled: true,
         isNextMonth: true,
-        mate:mate_default
+        mate:mate_default,
+        select_disabled:select_disabled
       })
       temp[6].push({
         year: rs.year,
@@ -183,7 +189,8 @@ export function getDays ({year, month, value, isRange = false, rangeBegin, range
         day: ++start,
         disabled: true,
         isNextMonth: true,
-        mate:mate_default
+        mate:mate_default,
+        select_disabled:select_disabled
       })
     }
   }

@@ -122,11 +122,22 @@
     }
 
   }
+  td span.no_selected_day2, td span.no_selected_day2.is-disabled {
+    border-radius:0;
+    height:35px;
+    line-height:1.6;
+    //color: #444;
+    .calendar-mate{
+      text-indent: -0.5em;
+      color: #839495;
+    }
+  }
   td span.is_selected_day2, td span.is_selected_day2.is-disabled {
     background-color: #eee;
     border-radius:0;
     height:35px;
     line-height:1.6;
+    color: #444;
     .calendar-mate{
       color: #869798;
     }
@@ -138,14 +149,7 @@
     height:35px;
     line-height:1.6;
     .calendar-mate{
-      text-indent: -0.5em;
-    }
-  }
-  td span.no_selected_day2, td span.no_selected_day2.is-disabled {
-    border-radius:0;
-    height:35px;
-    line-height:1.6;
-    .calendar-mate{
+      color: #fff;
       text-indent: -0.5em;
     }
   }
@@ -252,6 +256,21 @@
     color: #c0c0c0;
     pointer-events:none !important;
     cursor: default !important;
+  }
+  td.select_disabled {
+    //color: #c0c0c0;
+    pointer-events:none !important;
+    cursor: default !important;
+    span{
+      background-color: #eee;
+      border-radius:0;
+      height:35px;
+      line-height:1.6;
+      //color: #444;
+      .calendar-mate{
+        color: #869798;
+      }
+    }
   }
   td > span {
     display: inline-block;
