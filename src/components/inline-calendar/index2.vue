@@ -131,27 +131,43 @@
       newSelectedDays(){
 //        this.render(this.year,this.month,this.value)
       },
-      showCalendar(){
-        this.newSelectedDays = [];
-        this.render(this.year,this.month,this.value)
+      showCalendar(val){
+
       }
     },
     methods: {
       get_datas(){
         this.allDays = {};
-        var months_list = this.showMonthList;
-        var months_list_arr = [];
-        for(var i in months_list){
-          months_list_arr = months_list.split(months_list[i]);
-          this.render(months_list_arr[0],months_list_arr[1]);
+        var monthstr,yearstr;
+        var new_date = new Date();
+        var cur_month = new_date.getMonth();
+        var cur_year = new_date.getFullYear();
+        for(var i=0;i<this.showMonthLen;i++){
+          monthstr = cur_month + i;
+          yearstr = cur_year;
+          if(monthstr > 11){
+            monthstr = monthstr-12;
+            yearstr = cur_year + 1;
+          }
+          this.render(yearstr,monthstr);
         }
       },
       btnDo(type){
         if(type == 1){
 
         }else if(type == 2){
+          if(this.newSelectedDays.length==1){
+            $Y.alert("请选择离开日期");
+            return false;
+          }else if(this.newSelectedDays.length<1){
+            $Y.alert("请选择入住日期");
+            return false;
+          }
           this.allSelectedDays = JSON.parse(JSON.stringify(this.newSelectedDays));
         }
+
+        this.newSelectedDays = [];
+        this.get_datas();
         this.showCalendar = false;
       },
       replaceText (day, formatDay) {
@@ -161,13 +177,16 @@
         return date === 'TODAY' ? this.today : date
       },
       buildClass (index, child, year, month) {
+        if(child.isLastMonth || child.isNextMonth){
+          return '';
+        }
         var date_index = this.formatDate(year, month, child);
         if(date_index == this.special_val){
           child.disabled = false;
         }else if(this.selectedList[date_index] && this.selectedList[date_index].type==1){
           child.disabled = true;
         }
-
+//console.log(year,month,child.day,child.disabled,child.select_disabled,child,'********');
         const className = {
 //        current: child.current || isCurrent,
           'is-disabled': child.disabled,
@@ -260,7 +279,7 @@
     select (k1, k2, k3) {
       var cur_value = [this.allDays[k3].year, zero(this.allDays[k3].month + 1), zero(this.allDays[k3].days[k1][k2].day)].join('-');
       var sel_len = this.newSelectedDays.length;
-      var one_day = {};
+      var one_day = {},lin_days,lin_days2;
       var in_date_add,out_date_add,for_date_add,is_cancel=false;
 
       if(sel_len == 1){
@@ -327,7 +346,16 @@
                 if (for_date_add < in_date_add && !this.allDays[i].days[j][k].disabled || sel_open_largest && for_date_add > sel_open_largest) {
                   one_day = JSON.parse(JSON.stringify(this.allDays[i].days[j][k]));
                   one_day.select_disabled = true;
-                  this.allDays[i].days[j].$set(k, one_day);
+
+                  lin_days2 = JSON.parse(JSON.stringify(this.allDays[i].days[j]));
+                  lin_days2[k] = one_day;
+                  lin_days = JSON.parse(JSON.stringify(this.allDays[i]));
+                  lin_days.days = lin_days2;console.log(lin_days);
+//                  this.allDays[i].days[j].$set(k, one_day);
+//                  this.allDays[i].days.$set(j, lin_days2);
+//                  this.allDays.$set(i, lin_days);
+
+
                 }
               }
             }

@@ -17,7 +17,7 @@
         :default-pay = "default_pay"
         :show-calendar.sync="calendar_show"
         :show-month-list=show_month_list
-        :show-month-len = 6
+        :show-month-len = 4
         :all-selected-days.sync="selected_days"
         :render-on-value-change="false">
       </inline-calendar>
