@@ -346,16 +346,7 @@
                 if (for_date_add < in_date_add && !this.allDays[i].days[j][k].disabled || sel_open_largest && for_date_add > sel_open_largest) {
                   one_day = JSON.parse(JSON.stringify(this.allDays[i].days[j][k]));
                   one_day.select_disabled = true;
-
-                  lin_days2 = JSON.parse(JSON.stringify(this.allDays[i].days[j]));
-                  lin_days2[k] = one_day;
-                  lin_days = JSON.parse(JSON.stringify(this.allDays[i]));
-                  lin_days.days = lin_days2;console.log(lin_days);
-//                  this.allDays[i].days[j].$set(k, one_day);
-//                  this.allDays[i].days.$set(j, lin_days2);
-//                  this.allDays.$set(i, lin_days);
-
-
+                  this.allDays[i].days[j].$set(k, one_day);
                 }
               }
             }
