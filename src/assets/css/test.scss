@@ -400,3 +400,29 @@
     margin-bottom:25px;
   }
 }
+
+
+//discover
+#discover{
+  font-size:12px;
+  color: #949494;
+  .con_list{
+
+    .con_text{
+      padding:5px;
+      p{
+        margin-top:10px;
+        margin-bottom:10px;
+      }
+      .title{
+        font-size:16px;
+        color: #343333;
+      }
+      .con_info{
+        .date{
+          padding-left:3px;
+        }
+      }
+    }
+  }
+}

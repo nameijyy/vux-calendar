@@ -7,6 +7,9 @@ export function configRouter (router) {
     '/calender2': { //日历
       component: require('./components/calender2.vue'),
     },
+    '/discover': { //发现
+      component: require('./components/discover.vue'),
+    },
 
 
 
