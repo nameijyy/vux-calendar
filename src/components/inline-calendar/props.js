@@ -4,6 +4,18 @@ export default () => ({
     twoWay: true,
     default: ''
   },
+  showCalendar: {
+    type: Boolean,
+    twoWay: true,
+    default: true
+  },
+  allSelectedDays: {
+    type: Array,
+    twoWay: true,
+    default (){
+      return [];
+    }
+  },
   renderMonth: {
     type: Array, // [2018, 8]
     default () {
@@ -72,6 +84,10 @@ export default () => ({
   },
   defaultPay:{
     type:String
+  },
+  showMonthLen: {
+    type: Number,
+    default:6
   },
   showMonth: {
     type: Array,

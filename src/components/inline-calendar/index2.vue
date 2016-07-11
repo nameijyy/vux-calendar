@@ -1,44 +1,56 @@
 <template>
-  <div id="inline-calendar">
+  <div id="calendar-sel" v-show="showCalendar">
+    <div class="cal-title">
+      <div class="title-cancel" v-on:click="btnDo(1)">取消</div>
+      <div class="title-text" v-show="sel_in">选择入住日期</div>
+      <div class="title-text" v-show="!sel_in">选择离开日期</div>
+      <div class="title-btn" v-on:click="btnDo(2)">确定</div>
+    </div>
+    <div class="sel-content">
+      入住：<span v-show="in_date">{{in_date}}</span><span v-show="!in_date">--</span>
+      离开：<span v-show="out_date">{{out_date}}</span><span v-show="!out_date">--</span>
+      总共：<span v-show="in_total">{{in_total}}{{in_toatal_p}}</span><span v-show="!in_total">--</span>
+    </div>
+    <div id="inline-calendar">
+      <div class="inline-calendar" :class="{'is-weekend-highlight': highlightWeekend}" v-for="(k3,all_con) in allDays">
+        <div class="calendar-header" v-show="!hideHeader">
 
-    <div class="inline-calendar" :class="{'is-weekend-highlight': highlightWeekend}" v-for="(k3,all_con) in allDays">
-      <div class="calendar-header" v-show="!hideHeader">
+          <div class="calendar-month flex-warp">
+            <!--<div class="calendar-btn" @click="prev" v-show="!showMonth[0] || showMonth[0] && showMonth[0]< months[month]" ><a class="month-prev vux-prev-icon"  href="javascript:"></a></div>-->
+            <div class="calendar-month-txt flex-item cal-list-title">{{all_con.year}} - {{months[all_con.month]}}</div>
+            <!--<div class="calendar-btn" @click="next" v-show="!showMonth[1] || showMonth[1] && showMonth[1]> months[month]"><a  class="month-next vux-next-icon"  href="javascript:"></a></div>-->
+          </div>
 
-        <div class="calendar-month flex-warp">
-          <!--<div class="calendar-btn" @click="prev" v-show="!showMonth[0] || showMonth[0] && showMonth[0]< months[month]" ><a class="month-prev vux-prev-icon"  href="javascript:"></a></div>-->
-          <div class="calendar-month-txt flex-item">{{all_con.year}} - {{months[all_con.month]}}</div>
-          <!--<div class="calendar-btn" @click="next" v-show="!showMonth[1] || showMonth[1] && showMonth[1]> months[month]"><a  class="month-next vux-next-icon"  href="javascript:"></a></div>-->
         </div>
 
+        <table>
+          <thead v-show="!hideWeekList">
+          <tr>
+            <th v-for="(index, week) in weeksList" class="week is-week-list-{{index}}">{{week}}</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          <tr v-for="(k1,day) in all_con.days">
+
+            <td
+              :data-date="formatDate(all_con.year, all_con.month, child)"
+              :data-current="value"
+              v-for="(k2,child) in day"
+              :class="buildClass(k2, child, all_con.year,all_con.month)"
+              @click="select(k1,k2,k3,$event)">
+              <span
+                v-show="(!child.isLastMonth && !child.isNextMonth ) || (child.isLastMonth && showLastMonth) || (child.isNextMonth && showNextMonth)"
+                :class="buildClass3(k2, child,formatDate(all_con.year, all_con.month, child))" >
+                <i class="calendar-day">{{replaceText(child.day, formatDate(year, month, child))}}</i>
+                <i class="calendar-mate">{{child.mate}}</i>
+              </span>
+              {{{customSlotFn(k1, k2, child)}}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
-
-      <table>
-        <thead v-show="!hideWeekList">
-        <tr>
-          <th v-for="(index, week) in weeksList" class="week is-week-list-{{index}}">{{week}}</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        <tr v-for="(k1,day) in all_con.days">
-
-          <td
-            :data-date="formatDate(all_con.year, all_con.month, child)"
-            :data-current="value"
-            v-for="(k2,child) in day"
-            :class="buildClass(k2, child, all_con.year,all_con.month)"
-            @click="select(k1,k2,k3,$event)">
-            <span
-              v-show="(!child.isLastMonth && !child.isNextMonth ) || (child.isLastMonth && showLastMonth) || (child.isNextMonth && showNextMonth)"
-              :class="buildClass3(k2, child,formatDate(all_con.year, all_con.month, child))" >
-              <i class="calendar-day">{{replaceText(child.day, formatDate(year, month, child))}}</i>
-              <i class="calendar-mate">{{child.mate}}</i>
-            </span>
-            {{{customSlotFn(k1, k2, child)}}}
-          </td>
-        </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 
@@ -61,17 +73,33 @@
         today: format(new Date(), 'YYYY-MM-DD'),
         months: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
         newSelectedDays:[],
-        showNext:true,
-        showPrev:true,
-        special_val:''
+        showNext:false,
+        showPrev:false,
+        special_val:'',
+        in_date:'',
+        out_date:'',
+        in_total:'',
+        in_toatal_p:"晚",
+        sel_in:true
       }
     },
     ready () {
-      this.value = this.convertDate(this.value)
+      this.value = this.convertDate(this.value);
       this.allDays = {};
-      var months_list = [6,7,8,9];
-      for(var i in months_list){
-        this.render(2016,months_list[i]);
+
+      //处理可操作的月份
+      var monthstr,yearstr;
+      var new_date = new Date();
+      var cur_month = new_date.getMonth();
+      var cur_year = new_date.getFullYear();
+      for(var i=0;i<this.showMonthLen;i++){
+        monthstr = cur_month + i;
+        yearstr = cur_year;
+        if(monthstr > 11){
+          monthstr = monthstr-12;
+          yearstr = cur_year + 1;
+        }
+        this.render(yearstr,monthstr);
       }
 
     },
@@ -90,7 +118,7 @@
         if (this.renderOnValueChange) {
           this.render(null, null, val)
         } else {
-          this.render(this.year, this.month, this.value)
+//          this.render(this.year, this.month, this.value)
         }
         this.$emit('on-change', val)
       },
@@ -101,10 +129,31 @@
         this.render(this.year, this.month, this.value)
       },
       newSelectedDays(){
+//        this.render(this.year,this.month,this.value)
+      },
+      showCalendar(){
+        this.newSelectedDays = [];
         this.render(this.year,this.month,this.value)
       }
     },
     methods: {
+      get_datas(){
+        this.allDays = {};
+        var months_list = this.showMonthList;
+        var months_list_arr = [];
+        for(var i in months_list){
+          months_list_arr = months_list.split(months_list[i]);
+          this.render(months_list_arr[0],months_list_arr[1]);
+        }
+      },
+      btnDo(type){
+        if(type == 1){
+
+        }else if(type == 2){
+          this.allSelectedDays = JSON.parse(JSON.stringify(this.newSelectedDays));
+        }
+        this.showCalendar = false;
+      },
       replaceText (day, formatDay) {
         return this._replaceTextList[formatDay] || day
       },
@@ -112,7 +161,7 @@
         return date === 'TODAY' ? this.today : date
       },
       buildClass (index, child, year, month) {
-        var date_index = this.formatDate(year, month, child);console.log(this.special_val,'------');
+        var date_index = this.formatDate(year, month, child);
         if(date_index == this.special_val){
           child.disabled = false;
         }else if(this.selectedList[date_index] && this.selectedList[date_index].type==1){
@@ -126,16 +175,6 @@
 //        'is-today': child.isToday
         }
         className[`is-week-${index}`] = true;
-        return className
-      },
-      buildClass2 (index, child) {
-        const className = {}
-        //处理选中情况
-        var date_index = this.formatDate(this.year, this.month, child);
-        if(this.selectedList[date_index]){
-          className[this.selectedList[date_index].class] = true;
-          child.mate = this.selectedList[date_index].mate;
-        }
         return className
       },
       buildClass3 (index, child, date_index) {
@@ -170,10 +209,6 @@
             }
           }
         }
-//        console.log(this.newSelectedDays.toString().indexOf(date_index));
-//        if(this.newSelectedDays.toString().indexOf(date_index) > -1){
-//          className['new_selected_day_center'] = true;
-//        }
         return className
       },
       render (year, month) {
@@ -189,7 +224,7 @@
         this.days = data.days
         this.year = data.year
         this.month = data.month
-        var dt = year+'-'+(month+1);
+        var dt = year+'-'+zero(month+1);
         this.allDays[dt] = {'days':this.days,"year":this.year,"month":this.month}
       },
       formatDate: (year, month, child) => {
@@ -216,16 +251,25 @@
     go (year, month) {
       this.render(year, month)
     },
+    GetDateDiff(startDate,endDate){
+      var startTime = new Date(Date.parse(startDate.replace(/-/g,   "/"))).getTime();
+      var endTime = new Date(Date.parse(endDate.replace(/-/g,   "/"))).getTime();
+      var dates = Math.abs((startTime - endTime))/(1000*60*60*24);
+      return  dates;
+    },
     select (k1, k2, k3) {
       var cur_value = [this.allDays[k3].year, zero(this.allDays[k3].month + 1), zero(this.allDays[k3].days[k1][k2].day)].join('-');
       var sel_len = this.newSelectedDays.length;
       var one_day = {};
-      var in_date_add,out_date_add,for_date_add;
+      var in_date_add,out_date_add,for_date_add,is_cancel=false;
 
       if(sel_len == 1){
         var in_date_arr = this.newSelectedDays[0].split("-");
-        in_date_add = parseInt(in_date_arr[0].toString()+in_date_arr[1].toString() + in_date_arr[2].toString());console.log(in_date_add);
+        in_date_add = parseInt(in_date_arr[0].toString()+in_date_arr[1].toString() + in_date_arr[2].toString());
         out_date_add = parseInt(this.allDays[k3].year.toString()+zero(this.allDays[k3].days[k1][k2].month_str).toString() + zero(this.allDays[k3].days[k1][k2].day).toString());
+        this.in_date = in_date_arr[1]+"月"+in_date_arr[2]+"日";
+        this.out_date = zero(this.allDays[k3].days[k1][k2].month_str)+"月"+zero(this.allDays[k3].days[k1][k2].day)+"日";
+        this.in_total = this.GetDateDiff(in_date_arr[0]+"-"+in_date_arr[1]+"-"+in_date_arr[2],k3+"-"+zero(this.allDays[k3].days[k1][k2].day));
       }else{
         in_date_add = parseInt(this.allDays[k3].year.toString()+zero(this.allDays[k3].days[k1][k2].month_str).toString() + zero(this.allDays[k3].days[k1][k2].day).toString());
         var sel_date_arr = [],sel_date_add,sel_open_largest,sel_open_largest_date;
@@ -234,86 +278,67 @@
             sel_date_arr = si.split("-");
             sel_date_add = parseInt(sel_date_arr[0].toString()+sel_date_arr[1].toString()+sel_date_arr[2].toString());
             if(sel_date_add>in_date_add){
-              sel_open_largest = sel_date_add;console.log(sel_open_largest,'sel_open_largest');
+              sel_open_largest = sel_date_add;
               sel_open_largest_date = [sel_date_arr[0], sel_date_arr[1], sel_date_arr[2]].join('-');
               this.special_val = sel_open_largest_date;
               break;
             }
           }
         }
-
-//        for( var seli in this.selectedList){
-//          if(this.selectedList[seli].type == 1){
-//            if(seli == cur_value){
-//              if(!sel_open_largest_date || sel_open_largest_date != cur_value)
-//              return false;
-//            }
-//          }
-//        }
       }
 
       if(sel_len == 1){//选择离开时间
+        this.sel_in = true;
         this.special_val = "";
+        if(in_date_add == out_date_add){
+          this.newSelectedDays = [];
+          is_cancel = true;
+        }
         for(var i in this.allDays){
           for(var j in this.allDays[i].days){
             for(var k in this.allDays[i].days[j]){
-              for_date_add = parseInt(this.allDays[i].year.toString()+zero(this.allDays[i].days[k1][k2].month_str).toString() + zero(this.allDays[i].days[j][k].day).toString());
-              if(for_date_add > in_date_add && out_date_add > for_date_add){
-                this.newSelectedDays.push([this.allDays[i].year, zero(this.allDays[i].month + 1), zero(this.allDays[i].days[j][k].day)].join('-'));
-              }
-              if(!this.allDays[i].days[j][k].disabled) {//取消不可选控制
-                one_day = JSON.parse(JSON.stringify(this.allDays[i].days[j][k]));
-                one_day.select_disabled = false;
-                this.allDays[i].days[j].$set(k, one_day);
+              if(!this.allDays[i].days[j][k].disabled && !this.allDays[i].days[j][k].isNextMonth && !this.allDays[i].days[j][k].isLastMonth) {
+                if (!is_cancel) {
+                  for_date_add = parseInt(this.allDays[i].year.toString() + zero(this.allDays[i].days[j][k].month_str).toString() + zero(this.allDays[i].days[j][k].day).toString());
+                  if (for_date_add > in_date_add && for_date_add < out_date_add) {
+                    this.newSelectedDays.push([this.allDays[i].year, zero(this.allDays[i].month + 1), zero(this.allDays[i].days[j][k].day)].join('-'));
+                  }
+                }
+//                if(!this.allDays[i].days[j][k].disabled) {//取消不可选控制
+                  one_day = JSON.parse(JSON.stringify(this.allDays[i].days[j][k]));
+                  one_day.select_disabled = false;
+                  this.allDays[i].days[j].$set(k, one_day);
+//                }
               }
             }
           }
         }
       }else {//选择入住时间
+        this.sel_in = false;
         if(sel_len > 1){//取消选择
           this.newSelectedDays = [];
         }
-//        var in_date_add = parseInt(this.allDays[k3].year.toString()+zero(this.allDays[k3].days[k1][k2].month_str).toString() + zero(this.allDays[k3].days[k1][k2].day).toString());
-//        var for_date_add;
-//        if(sel_len > 1){//取消选择
-//          this.newSelectedDays = [];
-//        }
-//        var sel_date_arr = [],sel_date_add,sel_open_largest;
-//        for( var si in this.selectedList){
-//          if(this.selectedList[si].type == 1){
-//            sel_date_arr = si.split("-");
-//            sel_date_add = parseInt(sel_date_arr[0].toString()+sel_date_arr[1].toString()+sel_date_arr[2].toString());
-//            if(sel_date_add>in_date_add){
-//              sel_open_largest = sel_date_add;
-//              break;
-//            }
-//          }
-//        }
         //之前的日期全部不能选
         for(var i in this.allDays){
           for(var j in this.allDays[i].days){
             for(var k in this.allDays[i].days[j]){
-              for_date_add = parseInt(this.allDays[i].year.toString()+zero(this.allDays[i].days[k1][k2].month_str).toString() + zero(this.allDays[i].days[j][k].day).toString());
-              if(for_date_add < in_date_add && !this.allDays[i].days[j][k].disabled){
-                one_day = JSON.parse(JSON.stringify(this.allDays[i].days[j][k]));
-                one_day.select_disabled = true;
-                this.allDays[i].days[j].$set(k, one_day);
-              }
-              if(sel_open_largest && for_date_add > sel_open_largest){
-                console.log(for_date_add,this.allDays[i].days[k1][k2].month_str,'for_date_add');
-                one_day = JSON.parse(JSON.stringify(this.allDays[i].days[j][k]));
-                one_day.select_disabled = true;
-                this.allDays[i].days[j].$set(k, one_day);
+              if(!this.allDays[i].days[j][k].disabled && !this.allDays[i].days[j][k].isNextMonth && !this.allDays[i].days[j][k].isLastMonth) {
+                for_date_add = parseInt(this.allDays[i].year.toString() + zero(this.allDays[i].days[j][k].month + 1).toString() + zero(this.allDays[i].days[j][k].day).toString());
+                if (for_date_add < in_date_add && !this.allDays[i].days[j][k].disabled || sel_open_largest && for_date_add > sel_open_largest) {
+                  one_day = JSON.parse(JSON.stringify(this.allDays[i].days[j][k]));
+                  one_day.select_disabled = true;
+                  this.allDays[i].days[j].$set(k, one_day);
+                }
               }
             }
           }
         }
       }
 
-
-      this.value = cur_value
-      this.newSelectedDays.push(this.value);
-      console.log(this.newSelectedDays);
+//      this.value = cur_value
+      if(!is_cancel){
+        this.newSelectedDays.push(cur_value);
+      }
     }
   }
   }

@@ -4,32 +4,23 @@
     <div>
 
       <div v-on:click="sel_calendar">选择日期</div>
-
-      <div id="calendar-sel" v-show="calendar_show">
-        <div class="cal-title">
-          <div class="title-cancel" v-on:click="cancel_do">取消</div>
-          <div class="title-text">选择入住日期</div>
-          <div class="title-btn" v-on:click="do_sure">确定</div>
-        </div>
-        <div class="sel-content">
-          入住：<span>7月12日</span> 离开：<span>7月22日</span> 总共：<span>10晚</span>
-        </div>
-        <!--<div v-for="i in [7,8,9]" v-if="i >= 7">-->
-          <!--<div class="cal-list-title">2016 - {{i}}</div>-->
-          <inline-calendar
-            only-month
-            show-all-month
-            :return-six-rows="false"
-            :value.sync="listValue"
-            :disable-past="true"
-            :replace-text-list="{'TODAY':'今天'}"
-            :show-last-month="false"
-            :show-next-month="false"
-            :selected-list="list"
-            :default-pay = "default_pay"
-            :render-on-value-change="false"></inline-calendar>
-        <!--</div>-->
-      </div>
+      <inline-calendar
+        only-month
+        show-all-month
+        :return-six-rows="false"
+        :value.sync="listValue"
+        :disable-past="true"
+        :replace-text-list="{'TODAY':'今天'}"
+        :show-last-month="false"
+        :show-next-month="false"
+        :selected-list="list"
+        :default-pay = "default_pay"
+        :show-calendar.sync="calendar_show"
+        :show-month-list=show_month_list
+        :show-month-len = 6
+        :all-selected-days.sync="selected_days"
+        :render-on-value-change="false">
+      </inline-calendar>
     </div>
 </template>
 
@@ -43,21 +34,25 @@
     },
     data(){
       return{
-        calendar_show:true,
-        listValue: '',
+        calendar_show:false,
+        listValue: '2015-06-12',
         list:{},
-        default_pay:"￥352"
+        default_pay:"￥352",
+        show_month_list:[],
+        selected_days:[]
+      }
+    },
+    ready(){
+
+    },
+    watch:{
+      selected_days(){
+        console.log(this.selected_days);
       }
     },
     methods:{
       sel_calendar(){
         this.calendar_show = true;
-      },
-      cancel_do(){
-        this.calendar_show = false;
-      },
-      do_sure(){
-        this.calendar_show = false;
       }
     },
     route:{

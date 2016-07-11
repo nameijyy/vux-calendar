@@ -131,7 +131,6 @@ export default {
   },
   computed: {
     _replaceTextList () {
-
       //是否显示上一个月，下一个月
       if(this.showMonthList.length){
         var newstr = this.showMonthList.toString();
