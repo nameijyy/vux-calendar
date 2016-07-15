@@ -86,7 +86,7 @@ img{
   .is-weekend-highlight td.is-week-6 {
     color: #E59313;
   }
-   a {
+  a {
     text-decoration: none;
     tap-highlight-color: rgba(0, 0, 0, 0);
   }
@@ -553,6 +553,7 @@ img{
     color: #050505;
     padding:10px;
     text-align: center;
+
   }
   .load_down{
     color: #050505;
@@ -565,3 +566,64 @@ img{
     font-size: 25px;
   }
 }
+.icon-yunduan{
+
+  &:before{
+    display: inline-block;
+    line-height: 1;
+  }
+}
+.icon-yunduan-radius{
+  position: absolute;
+  left:50%;
+  top:10px;
+  margin-left: -16px;
+  transition: all ease 1s;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: block;
+  border: solid 1px transparent;
+  &.active{
+    border: solid 1px #050505;
+    opacity: 1;
+  }
+  &.rotate{
+    -webkit-backface-visibility:visible;
+    -webkit-transform-origin:center center;
+    -webkit-animation:animate_rotate_demo 1s 0s infinite linear normal none ;
+      &:before{
+      content: '';
+      position: absolute;
+      display: block;
+      width: 5px;
+      height: 5px;
+      background-color: rgb(225, 225, 225);
+      top:2px;
+      left:0;
+    }
+  }
+}
+
+ @-webkit-keyframes animate_rotate_demo{
+    0%{
+      -webkit-transform:rotate(0deg);
+    } 100%{
+        -webkit-transform:rotate(360deg);
+      }
+  }
+
+
+
+.fadein-transition {
+  transition: all .5s ease;
+  opacity: 1;
+  transform: translate(0, 10px);
+
+}
+.fadein-enter, .fadein-leave {
+  opacity: 0;
+  transform: translate(0, 20px);
+
+}
+

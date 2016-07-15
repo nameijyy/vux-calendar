@@ -36,16 +36,20 @@
         <!--<span v-show="pullupStatus === 'loading'"><spinner type="ios-small"></spinner></span>-->
       <!--</div>-->
       <!--pullup slot-->
-      <div slot="pullup" class="xs-plugin-pullup-container xs-plugin-pullup-up" style="position: absolute; width: 100%; height: 40px; bottom: -40px; text-align: center;">
-        <div class="load_icon" v-show="pullupStatus === 'default' || pullupStatus === 'up'">
+      <div slot="pullup" class="xs-plugin-pullup-container xs-plugin-pullup-up" style="position: absolute; width: 100%; height: 120px; bottom: -40px; text-align: center;">
+        <div class="load_icon" style="position:relative">
           <i class="iconfont icon-yunduan"></i>
+          <div class="icon-yunduan-radius" :class="{'active':pullupStatus === 'down' ||  pullupStatus === 'loading','rotate':pullupStatus === 'loading'}" ></div>
+          <!--:class="{'active':pullupStatus === 'down'}"-->
+          <div transition="fadein" v-show="pullupStatus === 'down' || pullupStatus === 'loading'" style="line-height:1.5" >
+            云山书院月溪鸣月明松下房栊静。<br />
+            日出云中竹涧清禅印花雨水似镜。
+          </div>
         </div>
-        <div class="load_down" v-show="pullupStatus === 'down'" >
-          <i class="iconfont icon-yunduan"></i>
-          <p>云山书院月溪鸣月明松下房栊静。</p>
-          <p>日出云中竹涧清禅印花雨水似镜。</p>
-        </div>
-        <span v-show="pullupStatus === 'loading'"><spinner type="ios-small"></spinner></span>
+
+        <span v-show="pullupStatus === 'loading'">
+          <div style="height:100px"></div>
+        </span>
       </div>
     </scroller>
   </div>
