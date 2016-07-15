@@ -57,7 +57,6 @@
 
 <script>
   import { Scroller, Divider, Spinner } from "vux/src/components"
-  import Mock from 'mockjs'
   export default {
     components: {
 
