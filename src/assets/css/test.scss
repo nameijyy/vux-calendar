@@ -1,3 +1,40 @@
+@font-face {
+  font-family: 'iconfont';
+  src: url('//at.alicdn.com/t/font_1468507890_2217321.eot'); /* IE9*/
+  src: url('//at.alicdn.com/t/font_1468507890_2217321.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('//at.alicdn.com/t/font_1468507890_2217321.woff') format('woff'), /* chrome、firefox */
+  url('//at.alicdn.com/t/font_1468507890_2217321.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  url('//at.alicdn.com/t/font_1468507890_2217321.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont{
+  font-family:"iconfont" !important;
+  font-size:16px;font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-pinglun:before{
+  content: '\e600';
+}
+.icon-yunduan:before{
+  content: '\e603';
+  font-size:25px;
+}
+
+
+body{
+  margin:0;
+  font-family:"宋体" ! important;
+  color: #949494;
+  font-size:12px;
+  padding: 0;
+  background-color: #e1e1e1;
+}
+img{
+  border: none;
+  display: block;
+}
 .flex-warp{
   display: flex;
   .flex-item{
@@ -404,25 +441,127 @@
 
 //discover
 #discover{
+  font-family:"Microsoft YaHei" ! important;
   font-size:12px;
   color: #949494;
   .con_list{
-
+    .con_img{
+      position: relative;
+      .bg_img{
+        width:100%;
+      }
+      .head_img{
+        width: 70px;
+        position: absolute;
+        bottom: -39px;
+        right: 33px;
+        border: 6px solid #fff;
+        border-radius: 50px;
+      }
+    }
     .con_text{
-      padding:5px;
+      padding:15px;
       p{
         margin-top:10px;
         margin-bottom:10px;
       }
       .title{
-        font-size:16px;
+        margin-top:0px;
+        font-size:14px;
         color: #343333;
       }
       .con_info{
         .date{
           padding-left:3px;
         }
+        span{
+          img{
+            position: relative;
+            width:16px;
+            margin-left:20px;
+            margin-right:10px;
+            top:2px;
+          }
+        }
       }
     }
+  }
+}
+
+//花雨间
+#hyj_index{
+  .con_list{
+    .hj_img{
+      width:100%;
+      img{
+        min-height:170px;
+        width:100%;
+      }
+    }
+    .center{
+      text-align: center;
+      padding:10px;
+      img{
+        width:8px;
+        margin-right:5px;
+      }
+    }
+    .data_list{
+      position: relative;
+      .bg_img{
+        min-height:184px;
+        width:100%;
+      }
+      .price_show{
+        color: #323232;
+        background-color: #fff;
+        position: absolute;
+        top:10px;
+        right:30px;
+        text-align: center;
+        padding:5px 10px;
+        .des{
+          font-weight:bold;
+          font-size:14px;
+          margin: 3px 0;
+        }
+        .price{
+          font-family:"Microsoft YaHei" ! important;
+          font-size:22px;
+          color: #ff4081;
+        }
+      }
+      .list_bottom{
+        padding:10px;
+        background-color: rgba(0, 0, 0, 0.46);
+        color: #fff;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        span{
+          background-color: #fff;
+          color: #000;
+          padding:3px;
+          border-radius: 3px;
+        }
+      }
+    }
+  }
+
+  .load_icon{
+    color: #050505;
+    padding:10px;
+    text-align: center;
+  }
+  .load_down{
+    color: #050505;
+    padding:10px;
+    text-align: center;
+  }
+  .pullup-arrow {
+    transition: all linear 0.2s;
+    color: #666;
+    font-size: 25px;
   }
 }

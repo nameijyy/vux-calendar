@@ -10,6 +10,9 @@ export function configRouter (router) {
     '/discover': { //发现
       component: require('./components/discover.vue'),
     },
+    '/index': { //花雨间
+      component: require('./components/index.vue'),
+    },
 
 
 

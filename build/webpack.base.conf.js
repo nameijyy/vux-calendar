@@ -39,10 +39,6 @@ module.exports = {
         loader: 'vue'
       },
       {
-        test: /vux.src.*?js$/,
-        loader: 'babel'
-      },
-      {
         test: /\.js$/,
         loader: 'babel',
         include: projectRoot,
@@ -77,7 +73,10 @@ module.exports = {
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
       },
-
+      {
+        test: /vux.src.*?js$/,
+        loader: 'babel'
+      }
 
 
     ]

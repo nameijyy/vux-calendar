@@ -10,13 +10,15 @@
   </div>
 </template>
 <script>
-//  window.type = /127\.0||192\./.test(window.location.href)?'jsonp':'get';
+  //  window.type = /127\.0||192\./.test(window.location.href)?'jsonp':'get';
   window.type = 'get';
-//  window.baseUrl = (type == 'jsonp')?'http://192.168.8.87:84':'';
+  //  window.baseUrl = (type == 'jsonp')?'http://192.168.8.87:84':'';
   window.baseUrl = '';
 
-  window.FastClick = require('assets/js/lib/fastclick.js');
-  FastClick.attach(document.body);
+  if(/Mac\sOS/.test(navigator.userAgent)){
+    window.FastClick = require('assets/js/lib/fastclick.js');
+    FastClick.attach(document.body);
+  }
   window.$Y = require('assets/js/common.js');
   $Y.init();
 

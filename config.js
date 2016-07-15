@@ -7,13 +7,13 @@ module.exports = {
   build: {
     index: path.resolve(__dirname, 'dist/'+paths+'/index.html'),
     assetsRoot: path.resolve(__dirname, 'dist'),
-    assetsSubDirectory: paths+'/static',
+    assetsSubDirectory: paths +'/static',
     assetsPublicPath: '',
-    productionSourceMap: false,
+    productionSourceMap: true,
     paths: paths,
   },
   dev: {
-    port: 8080,
+    port: 8081,
     proxyTable: {}
   }
 }
